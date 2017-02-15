@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.dtdream.commons:commons-spring:1.1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/dtdream/commons/commons-spring/1.1.0-SNAPSHOT/commons-spring-1.1.0-20161108.144804-72.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/dtdream/commons/commons-spring/1.1.0-SNAPSHOT/commons-spring-1.1.0-20161108.144804-72-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/dtdream/commons/commons-spring/1.1.0-SNAPSHOT/commons-spring-1.1.0-20161108.144804-72-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,16 @@
+#全局配置
+mybatis:
+  mapper-locations: classpath*:/mapper/*.xml
+  driver-class-name: org.mariadb.jdbc.Driver
+  type-aliases-package: com.dtdream.epsilon.id.po,com.dtdream.dingplus.user.service.demo,com.dtdream.dingplus.user.entity,com.dtdream.dingplus.user.entity.common,com.dtdream.dingplus.user.entity.org,com.dtdream.dingplus.user.entity.user
+  #idc那边比较特殊，我们需要把idc的一起搞进来，直接这样配置吧
+  data-source-name: defaultIdentityDataSourceName
+  transaction-manager-name: defaultIdentityDataSourceTransactionManager
+  sql-session-template-name: defaultIdentitySqlSessionTemplate
+  sql-session-factory-name: defaultIdentitySqlSessionFactory
+  mapper-scan:
+    - com.dtdream.dingplus.user.dao.**
+    - com.dtdream.dingplus.user.dao
+  url: "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF8"
+  username: "root"
+  password: "123456"
