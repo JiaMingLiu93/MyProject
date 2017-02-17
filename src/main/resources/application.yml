@@ -1,7 +1,7 @@
 #全局配置
 mybatis:
   mapper-locations: classpath*:/mapper/*.xml
-  type-aliases-package: com.liu.web.entity
+  type-aliases-package: com.liu.web.entity,com.dtdream.dingplus.alert.entity
   mapper-scan:
     - com.liu.web.dao.**
     - com.liu.web.dao

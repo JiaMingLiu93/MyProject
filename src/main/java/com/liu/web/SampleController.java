@@ -17,7 +17,6 @@ public class SampleController {
     @Autowired
     UserDao userDao;
 
-
     @Value("${user.age}")
     private String age;
     @RequestMapping("/")
