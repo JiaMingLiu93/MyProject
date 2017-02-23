@@ -3,7 +3,7 @@ package com.liu.design.flyweight;
 /**
  * Created by Jam on 2017/2/23.
  *
- * Flyweight pattern is primarily used to reduce the number of objects created and to decrease memory footprint and
+ * Flyweight pattern is primarily used to reduce the number of objects created and to decrease memory Image and
  * increase performance. This type of design pattern comes under structural pattern as this pattern provides ways to
  * decrease object count thus improving the object structure of application.
  *
