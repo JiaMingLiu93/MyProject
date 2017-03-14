@@ -1,12 +1,16 @@
 package com.liu.lambda;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import javafx.scene.control.Button;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -16,9 +20,31 @@ public class LambdaTest<T> {
     public static void main(String[] args) throws Exception {
         //testIflazyExecute();
         //testSupplier();
-        testNullStream();
+        //testNullStream();
+        testFilterMap();
     }
 
+
+    public static void testFilterMap(){
+        ArrayList<Map<String,String>> listMap = Lists.newArrayList();
+        Map<String, String> map1 = Maps.newHashMap();
+        map1.put("1","1");
+        map1.put("2","2");
+        map1.put("3","3");
+
+        listMap.add(map1);
+        List<HashMap<String, String>> collect = listMap.stream().map(map -> map.entrySet().stream().filter(entry -> {
+            String key = entry.getKey();
+            if (key.contains("1")) {
+                return false;
+            }
+            return true;
+        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, HashMap::new))).collect(Collectors.toList());
+
+        collect.forEach(System.out::println);
+
+        System.out.println(Lists.newArrayList().stream().anyMatch(o -> false));
+    }
     public static void testNullStream(){
         List<String> strings = null;
         try {

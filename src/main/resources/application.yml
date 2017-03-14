@@ -15,4 +15,9 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
+  main:
+    banner-mode: "off"
 
+metric:
+  config:
+    name: loadOne
