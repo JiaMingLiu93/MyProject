@@ -1,9 +1,15 @@
 package com.liu.test;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Jam on 2017/3/13.
@@ -17,7 +23,8 @@ public class Test {
         System.out.println("====="+loadOne);
     }
     public static void main(String[] args) {
-        testEquals();
+        //testEquals();
+        testMapPutNull();
     }
     public static void testEquals(){
         Long a = 0l;
@@ -26,5 +33,14 @@ public class Test {
         }else {
             System.out.println("it is false.");
         }
+    }
+    public static void testMapPutNull(){
+        HashMap<String, List<String>> map = Maps.newHashMap();
+        ArrayList<String> list = Lists.newArrayList();
+        map.put("q",null);
+        System.out.println(CollectionUtils.isEmpty(map));
+        map.entrySet().forEach(entry->{
+            entry.getValue().get(0);
+        });
     }
 }

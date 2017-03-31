@@ -21,7 +21,17 @@ public class LambdaTest<T> {
         //testIflazyExecute();
         //testSupplier();
         //testNullStream();
-        testFilterMap();
+        //testFilterMap();
+        testCollectMapFromMap();
+    }
+
+    public static void testCollectMapFromMap(){
+        HashMap<Long, Long> map1 = Maps.newHashMap();
+        map1.put(1L, 1L);
+        map1.put(2L, 2L);
+        map1.put(3L, 3L);
+        map1 = (HashMap<Long,Long>)map1.entrySet().stream().filter(entry -> !(entry.getKey() == 1L)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        System.out.println(map1);
     }
 
 
