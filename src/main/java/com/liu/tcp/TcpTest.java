@@ -62,4 +62,7 @@ public class TcpTest implements InitializingBean{
         Optional<InputStream> inputStreamOptional = socket.getInputStream();
         bufferedReader = new BufferedReader(new InputStreamReader(inputStreamOptional.get()));
     }
+
+    public static void main(String[] args) {
+    }
 }
