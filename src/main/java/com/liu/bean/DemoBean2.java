@@ -9,5 +9,4 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DemoBean2 {
     @Autowired
     DemoBean demoBean;
-
 }

@@ -1,6 +1,7 @@
 package com.liu.test;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,10 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +29,36 @@ public class Test {
         //testReturnInForeach();
         //testPutNullIntoList();
         //testReturnFromEmpty();
-        testHashMapToJson();
+        //testHashMapToJson();
+        //testSortHashMap();
+        //testListAddNUllS();
+        //testMultiSet();
+        testForIfContinue();
+    }
+
+    public static void testForIfContinue(){
+        int i = 1;
+        while (i<10){
+            if (i>5){
+                System.out.println(i);
+                if (i>8){
+                    return;
+                }
+            }
+            System.out.println("while:"+i);
+            i++;
+        }
+    }
+
+    public static void testMultiSet(){
+        HashMultiset<Long> longs = HashMultiset.create();
+        longs.add(1L);
+        longs.add(2L);
+        longs.add(1L);
+        longs.add(4L);
+        System.out.println(longs.elementSet());
+        System.out.println(longs.entrySet());
+
     }
     public static void testEquals(){
         Long a = 0l;
@@ -41,6 +68,7 @@ public class Test {
             System.out.println("it is false.");
         }
     }
+
     public static void testMapPutNull(){
         HashMap<String, List<String>> map = Maps.newHashMap();
         ArrayList<String> list = Lists.newArrayList();
@@ -88,5 +116,28 @@ public class Test {
         System.out.println(json);
         System.out.println(jsonString);
     }
+
+    public static void testSortHashMap(){
+        HashMap<String, String> map = Maps.newHashMap();
+        map.put("2017-04-28","1");
+        map.put("2017-04-26","2");
+        map.put("2017-04-27","3");
+        map.put("2017-04-25","4");
+        ArrayList<Map.Entry<String, String>> entries = new ArrayList<>(map.entrySet());
+        entries.sort(Comparator.comparing(Map.Entry::getKey));
+        System.out.println(entries);
+        System.out.println(map);
+        map.entrySet().stream().sorted(Comparator.comparing(Map.Entry::getKey)).forEach(System.out::println);
+
+    }
+
+    public static void testListAddNUllS(){
+        ArrayList<Object> list = Lists.newArrayList();
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        System.out.println(list);
+    }
+
 
 }

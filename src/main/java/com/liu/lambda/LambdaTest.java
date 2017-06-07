@@ -1,10 +1,13 @@
 package com.liu.lambda;
 
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import javafx.scene.control.Button;
 
+import javax.annotation.PreDestroy;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -25,7 +28,71 @@ public class LambdaTest<T> {
         //testCollectMapFromMap();
         //testPartitionBy();
         //testForkJoin();
-        testCollectList();
+        //testCollectList();
+        //testReduce();
+        //testCollectorsJoin();
+        //testChangeCollect();
+        //new LambdaTest<>().testForkJoinPool();
+        //testFlatMap();
+        //testListsPartition();
+        testClass();
+    }
+
+    static class con{
+        public String name;
+    }
+    public static void testClass(){
+        for (int i=0;i<100;i++){
+            con con = new con();
+            con.name="liu";
+        }
+    }
+
+    public static void testListsPartition(){
+        ArrayList<Integer> integers = Lists.newArrayList(1, 2, 3, 4, 5, 6);
+        List<List<Integer>> partition = Lists.partition(integers, 2);
+        System.out.println(partition);
+    }
+
+    public static void testFlatMap(){
+        HashMap<Integer, HashMap<Integer,Integer>> map1 = Maps.newHashMap();
+        HashMap<Integer, Integer> map2 = Maps.newHashMap();
+        map2.put(1,1);
+        HashMap<Integer, Integer> map3 = Maps.newHashMap();
+        map3.put(2,2);
+        map3.put(3,3);
+        map1.put(1,map2);
+        map1.put(2,map3);
+        ArrayList<Integer> integers = Lists.newArrayList(1, 2);
+        HashMap<Integer, Integer> collect = integers.stream().flatMap(integer -> map1.get(integer).entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, HashMap::new));
+        System.out.println(collect);
+    }
+    public static void testChangeCollect(){
+        ArrayList<Integer> integers = Lists.newArrayList(1, 2, 3);
+        Stream<Integer> stream = integers.stream();
+        integers.add(4);
+        long count = stream.distinct().count();
+        System.out.println(count);
+
+        stream.forEach(integer -> {
+            if (integer<3){
+                integers.remove(integer);
+            }
+        });
+    }
+
+    public static void testCollectorsJoin(){
+        ArrayList<Long> longs = Lists.newArrayList(1L, 2L, 3L);
+        String collect = longs.stream().map(String::valueOf).collect(Collectors.joining(","));
+        System.out.println(collect);
+
+    }
+
+    public static void testReduce(){
+        ArrayList<Long> longs = Lists.newArrayList(1L, 2L, 3L, 4L);
+        Long reduce = longs.stream().reduce(0L, (left, value) -> left + value);
+        System.out.println(reduce);
     }
 
     public static void testCollectList(){
@@ -36,9 +103,48 @@ public class LambdaTest<T> {
         map.put(2,longs1);
         ArrayList<Long> collect = map.entrySet().stream().map(Map.Entry::getValue).collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
         System.out.println(collect);
+        HashMultiset<Long> multiset = HashMultiset.create();
+        multiset.addAll(collect);
+        multiset.addAll(Lists.newArrayList(1L,6L));
+        int count = multiset.count(3L);
+        System.out.println(count);
+        multiset.entrySet().forEach(entry-> System.out.println(entry.getElement()+" "+entry.getCount()));
+        System.out.println(multiset.entrySet().size());
+        HashMultiset<Object> objects = HashMultiset.create(null);
 
     }
 
+    public void testForkJoinPool(){
+        Thread thread = new Thread(() -> {
+            ForkJoinUtil forkJoinUtil = new ForkJoinUtil(2);
+            Long aLong = forkJoinUtil.get(() -> 1L);
+            System.out.println(aLong);
+        });
+        thread.start();
+        System.out.println("test");
+    }
+
+    class ForkJoinUtil{
+        ForkJoinPool forkJoinPool;
+        public ForkJoinUtil(int size){
+            forkJoinPool = new ForkJoinPool(size);
+        }
+        public Long get(Callable<Long> callable){
+            try {
+                Long aLong = forkJoinPool.submit(callable).get();
+                destroy();
+                return aLong;
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        @PreDestroy
+        public void destroy(){
+            forkJoinPool.shutdownNow();
+            System.out.println("forkJoinPool shutdown now!");
+        }
+    }
     public static void testForkJoin() throws ExecutionException, InterruptedException {
 
         Stream<Double> firstRange = Stream.generate(Math::random).limit(100000000);

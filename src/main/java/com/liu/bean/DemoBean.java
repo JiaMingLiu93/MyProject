@@ -36,3 +36,4 @@ public class DemoBean implements BeanFactoryAware,BeanNameAware,InitializingBean
         System.out.println("i am in afterPropertiesSet");
     }
 }
+
