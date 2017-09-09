@@ -1,15 +1,15 @@
 package com.liu.test;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +33,48 @@ public class Test {
         //testSortHashMap();
         //testListAddNUllS();
         //testMultiSet();
-        testForIfContinue();
+        //testForIfContinue();
+        //byte[][] bytes = longsToBytes(Lists.newArrayList(100069151L));
+        //System.out.println(bytes);
+        //testCollectorsBuild();
+        testContainer();
+    }
+
+    public static void testContainer(){
+        //Supplier<TestContainer> a = ()-> new TestContainer();
+        //Supplier<TestContainer> objectSupplier= TestContainer::new;
+        //TestContainer testContainer = objectSupplier.get();
+        //testContainer.print();
+        BiConsumer<Long,Long> handler = (Long c, Long b) -> System.out.println("c+b=" + (c + b));
+        handler.accept(2L,3L);
+    }
+
+    public static void testCollectorsBuild(){
+        HashBasedTable<Long, Long, Long> table = HashBasedTable.create();
+        ArrayList<Long> list = Lists.newArrayList(1L,2L,3L);
+        BiConsumer<HashBasedTable<Long, Long, Long>, ImmutableTable<Long, Long, Long>> putAll = HashBasedTable::putAll;
+        Supplier<HashBasedTable<Long, Long, Long>> create = HashBasedTable::create;
+        BiConsumer<HashBasedTable<Long, Long, Long>, HashBasedTable<Long, Long, Long>> putAll1 = HashBasedTable::putAll;
+        HashBasedTable<Long, Long, Long> collect = list.stream().map(e -> ImmutableTable.of(e, e, e)).collect(create, putAll, putAll1);
+        System.out.println(collect);
+    }
+
+    public static byte[][] longsToBytes(List<Long> ls) {
+        byte[][] result = new byte[ls.size()][8];
+
+        for(int i = 0; i < ls.size(); ++i) {
+            long l = ((Long)ls.get(i)).longValue();
+            result[i][0] = (byte)((int)(l >> 56));
+            result[i][1] = (byte)((int)(l >> 48));
+            result[i][2] = (byte)((int)(l >> 40));
+            result[i][3] = (byte)((int)(l >> 32));
+            result[i][4] = (byte)((int)(l >> 24));
+            result[i][5] = (byte)((int)(l >> 16));
+            result[i][6] = (byte)((int)(l >> 8));
+            result[i][7] = (byte)((int)l);
+        }
+
+        return result;
     }
 
     public static void testForIfContinue(){

@@ -4,6 +4,8 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import javafx.scene.control.Button;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PreDestroy;
 import java.util.*;
@@ -35,11 +37,48 @@ public class LambdaTest<T> {
         //new LambdaTest<>().testForkJoinPool();
         //testFlatMap();
         //testListsPartition();
-        testClass();
+        //testClass();
+        //testFilterSelfList();
+        //testFilterEmptyStr();
+        testEmptyListToMap();
+    }
+
+    /**
+     * allocate memory but has no element.
+     */
+    public static void testEmptyListToMap(){
+        HashMap<String, Integer> collect = Lists.newArrayList().stream().map(a -> Maps.immutableEntry("", 1)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, HashMap::new));
+        if (collect==null){
+            System.out.println("null");
+        }
+        System.out.println(CollectionUtils.isEmpty(collect));
+    }
+
+
+    public static void testFilterEmptyStr(){
+        List<Long> collect = Arrays.stream("".split(",")).filter(s -> !StringUtils.isEmpty(s)).map(Long::valueOf).collect(Collectors.toList());
+        System.out.println(collect);
     }
 
     static class con{
         public String name;
+    }
+
+    public static void testFilterSelfList(){
+        con con = new con();
+        con.name="l";
+        con con1 = new con();
+        con1.name="j";
+        ArrayList<LambdaTest.con> cons = Lists.newArrayList(con, con1);
+        List<LambdaTest.con> l = cons.stream().map(con2 -> {
+            if (con2.name.equals("l")) {
+                con2.name = null;
+                return null;
+            }
+            return con2;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+        System.out.println(l.size());
+        System.out.println(l.get(0).name);
     }
     public static void testClass(){
         for (int i=0;i<100;i++){
